@@ -1,0 +1,38 @@
+﻿@model TestIdP.Models.SAMLResponseModel
+
+<form action="@Model.Destination" enctype="multipart/form-data" method="post">
+    <input type="hidden" name="SAMLResponse" value="@Model.SAMLResponse" />
+    <input type="hidden" name="RelayState" value="@Model.RelayState" />
+    <input id="submit" type="submit" value="submit" />
+</form>
+
+@if (Model.SAMLResponse == "")
+{
+    <p>@ViewData["Error"]</p>
+}
+else
+{ 
+<script>
+
+
+    const form = document.createElement('form');
+    form.method = 'post';
+    form.action = '@Model.Destination';
+
+    const hiddenFieldSR = document.createElement('input');
+    hiddenFieldSR.type = 'hidden';
+    hiddenFieldSR.name = 'SAMLResponse';
+    hiddenFieldSR.value = '@Model.SAMLResponse';
+
+    form.appendChild(hiddenFieldSR);
+    const hiddenFieldRS = document.createElement('input');
+    hiddenFieldRS.type = 'hidden';
+    hiddenFieldRS.name = 'RelayState';
+    hiddenFieldRS.value = '@Model.RelayState';
+    form.appendChild(hiddenFieldRS);
+      
+    document.body.appendChild(form);
+    form.submit();
+    
+</script>
+}

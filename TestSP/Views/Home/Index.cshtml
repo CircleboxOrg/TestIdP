@@ -1,0 +1,22 @@
+﻿@model TestSP.Models.SamlRequestModel
+<html>
+<head>
+
+</head>
+<body>
+    <form action="https://localhost:44300/?spId=1" method="post">
+
+
+
+        <!--    <form action="https://idp.technicality.online/?spId=1" method="post">-->
+        <input type="hidden" name="SAMLRequest" value="@Model.Base64SAMLRequest" />
+        <input type="hidden" name="RelayState" value="@Model.RelayState" />
+        <input type="text" name="username" value="@Model.username" />
+        <input type="submit" value="submit" />
+    </form>
+
+</body>
+    </html>
+
+
+
