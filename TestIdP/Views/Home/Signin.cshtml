@@ -30,10 +30,68 @@
             </div>
         </div>
     </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.SetHeaderToUrlEncoded, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <div class="checkbox">
+                @Html.EditorFor(model => model.SetHeaderToUrlEncoded)
+                @Html.ValidationMessageFor(model => model.SetHeaderToUrlEncoded, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.UrlEncodeSamlResponse, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <div class="checkbox">
+                @Html.EditorFor(model => model.UrlEncodeSamlResponse)
+                @Html.ValidationMessageFor(model => model.UrlEncodeSamlResponse, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.UrlEncodeRelayState, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <div class="checkbox">
+                @Html.EditorFor(model => model.UrlEncodeRelayState)
+                @Html.ValidationMessageFor(model => model.UrlEncodeRelayState, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.UseNamespaces, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <div class="checkbox">
+                @Html.EditorFor(model => model.UseNamespaces)
+                @Html.ValidationMessageFor(model => model.UseNamespaces, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.IncludeXmlDeclaration, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <div class="checkbox">
+                @Html.EditorFor(model => model.IncludeXmlDeclaration)
+                @Html.ValidationMessageFor(model => model.IncludeXmlDeclaration, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.SignAssertion, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <div class="checkbox">
+                @Html.EditorFor(model => model.SignAssertion)
+                @Html.ValidationMessageFor(model => model.SignAssertion, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Save" class="btn btn-default" />
+            <input type="submit" value="Submit" class="btn btn-default" />
         </div>
     </div>
 </div>

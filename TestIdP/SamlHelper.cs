@@ -127,7 +127,7 @@ namespace TestIdP
         {
             ResponseType response = new ResponseType();
             // Response Main Area
-            response.ID = "_" + Guid.NewGuid().ToString();
+            response.ID = "_" + Guid.NewGuid().ToString("N");
             response.Destination = recipient;
             response.Version = "2.0";
             response.IssueInstant = System.DateTime.UtcNow;
@@ -146,17 +146,19 @@ namespace TestIdP
             response.Status = status;
 
             XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
-            ns.Add("saml2p", "urn:oasis:names:tc:SAML:2.0:protocol");
-            ns.Add("saml2", "urn:oasis:names:tc:SAML:2.0:assertion");
-            //ns.Add("ds", "http://www.w3.org/2000/09/xmldsig#");
-        
+            if(options.UseNamespaces)
+            { 
+                ns.Add("saml2p", "urn:oasis:names:tc:SAML:2.0:protocol");
+                ns.Add("saml2", "urn:oasis:names:tc:SAML:2.0:assertion");
+                ns.Add("ds", "http://www.w3.org/2000/09/xmldsig#");
+            }
             XmlSerializer responseSerializer =
                 new XmlSerializer(response.GetType());
 
             StringWriter stringWriter = new StringWriter();
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.Encoding = Encoding.UTF8;
-            settings.OmitXmlDeclaration = false;
+            settings.OmitXmlDeclaration = true;
             settings.Indent = true;
 
             XmlWriter responseWriter = XmlTextWriter.Create(stringWriter, settings);
@@ -174,14 +176,17 @@ namespace TestIdP
             samlString = stringWriter.ToString();
 
             samlString = samlString.Replace("SubjectConfirmationData",
-                string.Format("SubjectConfirmationData NotOnOrAfter=\"{0:o}\" Recipient=\"{1}\"",
-                DateTime.UtcNow.AddMinutes(5), recipient));
+                string.Format("SubjectConfirmationData NotOnOrAfter=\"{0:o}\" Recipient=\"{1}\" InResponseTo=\"{2:D}\" ",
+                DateTime.UtcNow.AddMinutes(5), recipient, requestid));
 
             stringWriter.Close();
 
             XmlDocument doc = new XmlDocument();
-            doc.LoadXml(samlString);
-            
+            //doc.LoadXml(samlString);
+            byte[] samlBytes = Encoding.UTF8.GetBytes(samlString);
+            var ms = new MemoryStream(samlBytes);
+            doc.Load(ms);
+
             X509Certificate2 cert = null;
             if (System.IO.File.Exists(certFile))
             {
@@ -221,10 +226,23 @@ namespace TestIdP
                     "Saml Assertion before encoding = {0}",
                     doc.OuterXml.ToString());
             }
-            string responseStr = doc.OuterXml;
+            //string responseStr = doc.OuterXml;
 
-            byte[] base64EncodedBytes =
-                Encoding.UTF8.GetBytes(responseStr);
+            //byte[] base64EncodedBytes =
+            //    Encoding.UTF8.GetBytes(responseStr);
+            
+            if (options.IncludeXmlDeclaration)
+            { 
+                //Create an XML declaration. 
+                XmlDeclaration xmldecl;
+                xmldecl = doc.CreateXmlDeclaration("1.0","UTF-8", "no");
+                //Add the new node to the document.
+                XmlElement root = doc.DocumentElement;
+                doc.InsertBefore(xmldecl, root);
+
+            }
+
+            byte[] base64EncodedBytes = Encoding.UTF8.GetBytes(doc.OuterXml);
 
             string returnValue = System.Convert.ToBase64String(
                 base64EncodedBytes);

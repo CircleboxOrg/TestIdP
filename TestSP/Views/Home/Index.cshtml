@@ -8,7 +8,9 @@
 
 
 
-        <!--    <form action="https://idp.technicality.online/?spId=1" method="post">-->
+
+
+        <!--<form action="https://idp.technicality.online/?spId=1" method="post" enctype="application/x-www-form-urlencoded">-->
         <input type="hidden" name="SAMLRequest" value="@Model.Base64SAMLRequest" />
         <input type="hidden" name="RelayState" value="@Model.RelayState" />
         <input type="text" name="username" value="@Model.username" />
@@ -16,7 +18,7 @@
     </form>
 
 </body>
-    </html>
+        </html>
 
 
 

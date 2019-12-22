@@ -58,7 +58,17 @@ namespace TestIdP.Controllers
 
         public ActionResult Signin()
         {
-            ViewData.Model = new Models.IdPOptionsModel();
+            var model = new Models.IdPOptionsModel();
+            model.EchoRelayState = false;
+            model.IncludeXmlDeclaration = true;
+            model.SetHeaderToUrlEncoded = true;
+            model.SignAssertion = true;
+            model.UrlEncodeRelayState = false;
+            model.UrlEncodeSamlResponse = false;
+            model.UseNamespaces = true;
+            model.UseSHA256 = false;
+
+            ViewData.Model = model;
             return View();
         }
 
@@ -74,10 +84,9 @@ namespace TestIdP.Controllers
             string username = Session["username"].ToString();
             int spId = Convert.ToInt32(Session["spId"]);
 
-            var bSignAssertion = true;
-
+            
             SigningHelper.SignatureType signatureType = SigningHelper.SignatureType.Response;
-            if (bSignAssertion)
+            if (options.SignAssertion)
             {
                 signatureType = SigningHelper.SignatureType.Assertion;
             }
@@ -103,18 +112,17 @@ namespace TestIdP.Controllers
             attributes.Add("IDPEmail", username);
             string stringSamlResponse = "";
             try
-            { 
-                //stringSamlResponse = System.Web.HttpUtility.UrlEncode(
-                //        SamlHelper.GetPostSamlResponse(strRecipient,
-                //            strIssuer, strSubject, strAudience, requestId, nameIdPolicyFormat,
-                //            storeLocation, storeName, findType,
-                //            certFileLocation, certPassword, certFindKey,
-                //            attributes, signatureType, options));
+            {
                 stringSamlResponse = SamlHelper.GetPostSamlResponse(strRecipient,
-                            strIssuer, strSubject, strAudience, requestId, nameIdPolicyFormat,
-                            storeLocation, storeName, findType,
-                            certFileLocation, certPassword, certFindKey,
-                            attributes, signatureType, options);
+                                strIssuer, strSubject, strAudience, requestId, nameIdPolicyFormat,
+                                storeLocation, storeName, findType,
+                                certFileLocation, certPassword, certFindKey,
+                                attributes, signatureType, options);
+                if (options.UrlEncodeSamlResponse)
+                {
+                    stringSamlResponse = System.Web.HttpUtility.UrlEncode(stringSamlResponse);
+                }
+                
             }
             catch (Exception ex)
             {
@@ -130,21 +138,40 @@ namespace TestIdP.Controllers
             model.SAMLResponse = stringSamlResponse;
             if (options.EchoRelayState)
             {
-                //model.RelayState = System.Web.HttpUtility.UrlEncode(strTarget);
-                model.RelayState = RelayState;
+                if (options.UrlEncodeRelayState)
+                {
+                    model.RelayState = System.Web.HttpUtility.UrlEncode(RelayState);
+                    
+                }
+                else
+                {
+                    model.RelayState = RelayState;
+                }
             }
             else
             {
                 //send hardcoded value back
                 model.RelayState = "idp.technicality.online";
+                if (options.UrlEncodeRelayState)
+                {
+                    model.RelayState = System.Web.HttpUtility.UrlEncode(model.RelayState);
+                }
+                
             }
  
             if (spId == 1)
                 model.Destination = "https://localhost:44331/Home/Receive";
             else
                 model.Destination = strRecipient;
-            
-            
+
+            if (options.SetHeaderToUrlEncoded)
+            {
+                model.Enctype = "application/x-www-form-urlencoded";
+            }
+            else
+            {
+                model.Enctype = "multipart/form-data";
+            }
             ViewData.Model = model;
 
             return View("SamlResponse");

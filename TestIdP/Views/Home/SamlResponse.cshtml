@@ -18,6 +18,8 @@ else
     const form = document.createElement('form');
     form.method = 'post';
     form.action = '@Model.Destination';
+    form.enctype = '@Model.Enctype';
+    
 
     const hiddenFieldSR = document.createElement('input');
     hiddenFieldSR.type = 'hidden';

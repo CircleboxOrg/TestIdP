@@ -10,5 +10,6 @@ namespace TestIdP.Models
         public string Destination { get; set; }
         public string SAMLResponse { get; set; }
         public string RelayState { get; set; }
+        public string Enctype { get; set; }
     }
 }

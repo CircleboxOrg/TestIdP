@@ -15,11 +15,25 @@ namespace TestSP.Controllers
             return View();
         }
 
-        
+
         [HttpPost]
         public ActionResult Receive(string SAMLResponse, string RelayState)
         {
-            byte[] responseBytes = Convert.FromBase64String(System.Web.HttpUtility.UrlDecode(SAMLResponse));
+            byte[] responseBytes = null;
+
+
+
+            //if (HttpContext.Request.Headers["Content-Type"].StartsWith("multipart/form-data"))
+            //{
+                System.IO.File.WriteAllText(HttpRuntime.BinDirectory + "samlResponse.txt", SAMLResponse);
+                responseBytes = Convert.FromBase64String(SAMLResponse);
+            //}
+            //else
+            //{
+            //    System.IO.File.WriteAllText(HttpRuntime.BinDirectory + "samlResponse.txt", System.Web.HttpUtility.UrlDecode(SAMLResponse));
+            //    responseBytes = Convert.FromBase64String(System.Web.HttpUtility.UrlDecode(SAMLResponse));
+            //}
+
             var encoding = new System.Text.UTF8Encoding();
             var responseString = encoding.GetString(responseBytes);
             ViewData.Model = responseString;
