@@ -50,7 +50,7 @@ namespace TestSP.Models
 
         public SamlRequestModel()
         {
-            this.username = "petey@ducttapetechnology.com";
+            this.username = Properties.Settings.Default.DefaultUserName;
         }
     }
 }

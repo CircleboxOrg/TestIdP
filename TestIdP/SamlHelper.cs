@@ -71,7 +71,6 @@ namespace TestIdP
             authStatement.AuthnInstant = DateTime.UtcNow;
             AuthnContextType context = new AuthnContextType();
             context.ItemsElementName = new ItemsChoiceType5[] { ItemsChoiceType5.AuthnContextClassRef };
-            //context.Items = new object[] { "AuthnContextClassRef" };
             context.Items = new object[] { "urn:oasis:names:tc:SAML:2.0:ac:classes:unspecified" };
             authStatement.AuthnContext = context;
 

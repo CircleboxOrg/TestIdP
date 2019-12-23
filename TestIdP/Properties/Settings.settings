@@ -1,0 +1,21 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="TestIdP.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="Recipient" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://login.microsoftonline.com/login.srf</Value>
+    </Setting>
+    <Setting Name="Issuer" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://idp.technicality.online</Value>
+    </Setting>
+    <Setting Name="CertThumbprint" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">b4206fb1c13a3d1b4d32f83ff2f1f30c77064e6f</Value>
+    </Setting>
+    <Setting Name="CertPassword" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">streit</Value>
+    </Setting>
+    <Setting Name="TestSPUrl" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://localhost:44331/Home/Receive</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

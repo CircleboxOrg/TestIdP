@@ -21,19 +21,24 @@ namespace TestSP.Controllers
         {
             byte[] responseBytes = null;
 
-
-
-            //if (HttpContext.Request.Headers["Content-Type"].StartsWith("multipart/form-data"))
-            //{
-                System.IO.File.WriteAllText(HttpRuntime.BinDirectory + "samlResponse.txt", SAMLResponse);
-                responseBytes = Convert.FromBase64String(SAMLResponse);
-            //}
-            //else
-            //{
-            //    System.IO.File.WriteAllText(HttpRuntime.BinDirectory + "samlResponse.txt", System.Web.HttpUtility.UrlDecode(SAMLResponse));
-            //    responseBytes = Convert.FromBase64String(System.Web.HttpUtility.UrlDecode(SAMLResponse));
-            //}
-
+            // not sure if we need to UrlDecode or not
+            string responseBase64 = "";
+            try
+            {
+                responseBase64 = System.Web.HttpUtility.UrlDecode(SAMLResponse);
+                responseBytes = Convert.FromBase64String(responseBase64);
+                
+            }
+            catch(Exception)
+            {
+                // if that didn't work - we didn't need to UrlDecode
+                responseBase64 = SAMLResponse;
+                responseBytes = Convert.FromBase64String(responseBase64);
+                
+            }
+            // save the base 64 response
+            System.IO.File.WriteAllText(HttpRuntime.BinDirectory + "samlResponse.txt", responseBase64);
+            
             var encoding = new System.Text.UTF8Encoding();
             var responseString = encoding.GetString(responseBytes);
             ViewData.Model = responseString;

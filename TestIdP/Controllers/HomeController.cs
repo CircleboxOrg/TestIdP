@@ -91,22 +91,18 @@ namespace TestIdP.Controllers
                 signatureType = SigningHelper.SignatureType.Assertion;
             }
 
-            string strRecipient = "https://login.microsoftonline.com/login.srf";
-            string strIssuer = "https://idp.technicality.online";
+            string strRecipient = Properties.Settings.Default.Recipient;
+            string strIssuer = Properties.Settings.Default.Issuer;
             string strSubject = username;
             string strAudience = requestIssuer;
 
             // Set Parameters to the method call to either the configuration value or a default value
-            //StoreLocation storeLocation = true ? (StoreLocation)Enum.Parse(typeof(StoreLocation), "") : StoreLocation.LocalMachine;
             StoreLocation storeLocation = StoreLocation.CurrentUser;
-            //StoreName storeName = true ? (StoreName)Enum.Parse(typeof(StoreName), "") : StoreName.Root;
             StoreName storeName = StoreName.My;
-            //X509FindType findType = true ? (X509FindType)Enum.Parse(typeof(X509FindType), "") : X509FindType.FindByThumbprint;
             X509FindType findType = X509FindType.FindByThumbprint;
-            //string certFileLocation = @"C:\Users\Jeff Trotman\OneDrive - Technicality, LLC\Private.id\MyCert.pfx";
-            string certFileLocation = HttpRuntime.BinDirectory + "privateid2.pfx";
-            string certPassword = "streit";
-            string certFindKey = "b4206fb1c13a3d1b4d32f83ff2f1f30c77064e6f";
+            string certFileLocation = "";
+            string certPassword = Properties.Settings.Default.CertPassword;
+            string certFindKey = Properties.Settings.Default.CertThumbprint;
 
             Dictionary<string, string> attributes = new Dictionary<string, string>();
             attributes.Add("IDPEmail", username);
@@ -160,9 +156,14 @@ namespace TestIdP.Controllers
             }
  
             if (spId == 1)
-                model.Destination = "https://localhost:44331/Home/Receive";
+            {
+                // return to TestSP URL
+                model.Destination = Properties.Settings.Default.TestSPUrl;
+            }
             else
+            { 
                 model.Destination = strRecipient;
+            }
 
             if (options.SetHeaderToUrlEncoded)
             {
